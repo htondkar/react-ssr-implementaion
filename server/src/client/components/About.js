@@ -1,16 +1,41 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { fetchUsersThunk } from '../actions/actionCreators'
 
-const About = () => (
-  <main>
-    <h3>about us</h3>
-    <p>
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. A sunt id quaerat enim
-      esse quod incidunt velit eum omnis nulla earum debitis veniam magnam minima
-      repellendus quasi, dolor eveniet? Accusantium.
-    </p>
-    <Link to="/">Home</Link>
-  </main>
-)
+class About extends Component {
+  componentDidMount() {
+    this.props.fetchUsers()
+  }
 
-export default About
+  render() {
+    return (
+      <main>
+        <h3>Our users</h3>
+        <section>
+          <ul>
+            {this.props.users.map(user => (
+              <li key={user.id}>{user.name}</li>
+            ))}
+          </ul>
+        </section>
+        <Link to="/">Home</Link>
+      </main>
+    )
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    users: state.users
+  }
+}
+
+const actions = {
+  fetchUsers: fetchUsersThunk,
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(About)
