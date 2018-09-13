@@ -100,17 +100,54 @@ var _renderer2 = _interopRequireDefault(_renderer);
 
 var _serverStoreFactory = __webpack_require__(11);
 
+var _reactRouterConfig = __webpack_require__(21);
+
+var _routes = __webpack_require__(22);
+
+var _routes2 = _interopRequireDefault(_routes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var PORT = 3000;
 var app = (0, _express2.default)();
 
 app.use(_express2.default.static('public'));
 
-app.get('*', function (req, res) {
-  var store = (0, _serverStoreFactory.storeFactory)();
-  res.send((0, _renderer2.default)(req, store));
-});
+app.get('*', function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
+    var store, componentsToRenderForRoute, promises;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            store = (0, _serverStoreFactory.storeFactory)();
+            componentsToRenderForRoute = (0, _reactRouterConfig.matchRoutes)(_routes2.default, req.path);
+            promises = componentsToRenderForRoute.map(function (match) {
+              var preLoadProps = match.route.component.preLoadProps;
+
+              return preLoadProps ? preLoadProps(store) : null;
+            });
+            _context.next = 5;
+            return Promise.all(promises);
+
+          case 5:
+
+            res.send((0, _renderer2.default)(req, store));
+
+          case 6:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function (_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}());
 
 app.listen(PORT, function () {
   console.log('listening on port:', PORT);
@@ -144,9 +181,11 @@ var _reactRouterDom = __webpack_require__(1);
 
 var _reactRedux = __webpack_require__(7);
 
-var _Routes = __webpack_require__(8);
+var _reactRouterConfig = __webpack_require__(21);
 
-var _Routes2 = _interopRequireDefault(_Routes);
+var _routes = __webpack_require__(22);
+
+var _routes2 = _interopRequireDefault(_routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -159,7 +198,7 @@ function renderer(req, store) {
     _react2.default.createElement(
       _reactRouterDom.StaticRouter,
       { context: routerContext, location: req.path },
-      _react2.default.createElement(_Routes2.default, null)
+      (0, _reactRouterConfig.renderRoutes)(_routes2.default)
     )
   ));
 
@@ -179,44 +218,7 @@ module.exports = require("react-dom/server");
 module.exports = require("react-redux");
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(1);
-
-var _Home = __webpack_require__(9);
-
-var _Home2 = _interopRequireDefault(_Home);
-
-var _About = __webpack_require__(10);
-
-var _About2 = _interopRequireDefault(_About);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Routes = function Routes() {
-  return _react2.default.createElement(
-    'div',
-    null,
-    _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, component: _Home2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { path: '/about', exact: true, component: _About2.default })
-  );
-};
-
-exports.default = Routes;
-
-/***/ }),
+/* 8 */,
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -313,7 +315,7 @@ var About = function (_Component) {
   _createClass(About, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.fetchUsers();
+      // this.props.fetchUsers()
     }
   }, {
     key: 'render',
@@ -352,6 +354,15 @@ var About = function (_Component) {
 
   return About;
 }(_react.Component);
+
+// returns a promise, because store.dispatch returns the fired action,
+// in this case its a promise because of the async function,
+// redux thunk also returns the promise returned from the thunk itself.
+
+
+About.preLoadProps = function (store) {
+  return store.dispatch((0, _actionCreators.fetchUsersThunk)());
+};
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
@@ -616,6 +627,44 @@ module.exports = require("axios");
 /***/ (function(module, exports) {
 
 module.exports = require("babel-polyfill");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-config");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Home = __webpack_require__(9);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+var _About = __webpack_require__(10);
+
+var _About2 = _interopRequireDefault(_About);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var routeDefinitions = [{
+  path: '/',
+  component: _Home2.default,
+  exact: true
+}, {
+  path: '/about',
+  component: _About2.default
+}];
+
+exports.default = routeDefinitions;
 
 /***/ })
 /******/ ]);

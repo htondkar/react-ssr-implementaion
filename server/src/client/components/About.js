@@ -5,7 +5,7 @@ import { fetchUsersThunk } from '../actions/actionCreators'
 
 class About extends Component {
   componentDidMount() {
-    this.props.fetchUsers()
+    // this.props.fetchUsers()
   }
 
   render() {
@@ -25,9 +25,14 @@ class About extends Component {
   }
 }
 
+// returns a promise, because store.dispatch returns the fired action,
+// in this case its a promise because of the async function,
+// redux thunk also returns the promise returned from the thunk itself.
+About.preLoadProps = store => store.dispatch(fetchUsersThunk())
+
 const mapStateToProps = state => {
   return {
-    users: state.users
+    users: state.users,
   }
 }
 
