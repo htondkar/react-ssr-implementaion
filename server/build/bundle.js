@@ -245,12 +245,17 @@ var _reactRedux = __webpack_require__(2);
 
 var _reactRouterConfig = __webpack_require__(3);
 
+var _serializeJavascript = __webpack_require__(22);
+
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
 var _routes = __webpack_require__(4);
 
 var _routes2 = _interopRequireDefault(_routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// important: to protect against XSS attacks, use serialize to serialize the state
 function renderer(req, store) {
   var routerContext = {};
 
@@ -264,7 +269,7 @@ function renderer(req, store) {
     )
   ));
 
-  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n\n        <script>\n          window.__PRELOADED_STATE__ = ' + JSON.stringify(store.getState()).replace(/</g, '\\u003c') + '\n        </script>\n\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
+  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n\n        <script>\n          window.__PRELOADED_STATE__ = ' + (0, _serializeJavascript2.default)(store.getState()) + '\n        </script>\n\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
 }
 
 /***/ }),
@@ -655,6 +660,12 @@ var createReducer = exports.createReducer = function createReducer() {
     return actionHandlers[action.type] ? actionHandlers[action.type](state, action) : state;
   };
 };
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
 
 /***/ })
 /******/ ]);
