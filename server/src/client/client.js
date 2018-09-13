@@ -8,12 +8,9 @@ import { renderRoutes } from 'react-router-config'
 import routeDefinitions from './routes.definitions'
 import { store } from './store/createStore'
 
-const attachToDOM = store =>
-  ReactDOM.hydrate(
-    <Provider store={store}>
-      <BrowserRouter>{renderRoutes(routeDefinitions)}</BrowserRouter>
-    </Provider>,
-    document.getElementById('root')
-  )
-
-attachToDOM(store)
+ReactDOM.hydrate(
+  <Provider store={store}>
+    <BrowserRouter>{renderRoutes(routeDefinitions)}</BrowserRouter>
+  </Provider>,
+  document.getElementById('root')
+)

@@ -22,6 +22,14 @@ export default function renderer(req, store) {
       <head></head>
       <body>
         <div id="root">${content}</div>
+
+        <script>
+          window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(
+            /</g,
+            '\\u003c'
+          )}
+        </script>
+
         <script src="bundle.js"></script>
       </body>
     </html>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchUsersThunk } from '../actions/actionCreators'
 
-class About extends Component {
+class AboutPage extends Component {
   componentDidMount() {
     // this.props.fetchUsers()
   }
@@ -28,7 +28,7 @@ class About extends Component {
 // returns a promise, because store.dispatch returns the fired action,
 // in this case its a promise because of the async function,
 // redux thunk also returns the promise returned from the thunk itself.
-About.preLoadProps = store => store.dispatch(fetchUsersThunk())
+AboutPage.preLoadProps = store => store.dispatch(fetchUsersThunk())
 
 const mapStateToProps = state => {
   return {
@@ -43,4 +43,4 @@ const actions = {
 export default connect(
   mapStateToProps,
   actions
-)(About)
+)(AboutPage)
