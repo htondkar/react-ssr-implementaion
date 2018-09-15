@@ -1,30 +1,26 @@
 import 'babel-polyfill'
 import express from 'express'
-import renderer from './helpers/renderer'
-import { storeFactory } from './helpers/serverStoreFactory'
-import { matchRoutes } from 'react-router-config'
-import routeDefinitions from './client/routes.definitions'
+import { renderHandler } from './handlers'
+import proxy from 'express-http-proxy'
 
+// initialize
 const PORT = 3000
 const app = express()
 
+// send all api request to the real API
+const proxyOptions = {
+  proxyReqOptDecorator(options) {
+    options.header['x-forward-host'] = 'localhost:3000'
+    return options
+  },
+}
+
+app.use('/api', proxy('https://react-ssr-api.herokuapp.com', proxyOptions))
+
+// serve the static files
 app.use(express.static('public'))
 
-app.get('*', async (req, res) => {
-  const store = storeFactory()
+// render app for all other routes
+app.get('*', renderHandler)
 
-  const componentsToRenderForRoute = matchRoutes(routeDefinitions, req.path)
-
-  const promises = componentsToRenderForRoute.map(match => {
-    const { preLoadProps } = match.route.component
-    return preLoadProps ? preLoadProps(store) : null
-  })
-
-  await Promise.all(promises)
-
-  res.send(renderer(req, store))
-})
-
-app.listen(PORT, () => {
-  console.log('listening on port:', PORT)
-})
+app.listen(PORT, () => console.log('listening on port:', PORT))
