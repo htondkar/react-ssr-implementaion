@@ -3,6 +3,8 @@ import { storeFactory } from './helpers/serverStoreFactory'
 import { matchRoutes } from 'react-router-config'
 import routeDefinitions from './client/routes.definitions'
 import Axios from 'axios'
+import thunk from 'redux-thunk'
+
 import { Api } from './client/api/api'
 
 const createApiInstance = req => {

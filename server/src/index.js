@@ -10,7 +10,8 @@ const app = express()
 // send all api request to the real API
 const proxyOptions = {
   proxyReqOptDecorator(options) {
-    options.header['x-forward-host'] = 'localhost:3000'
+    console.log(options)
+    options.headers['x-forward-host'] = 'localhost:3000'
     return options
   },
 }

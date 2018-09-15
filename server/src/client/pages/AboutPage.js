@@ -5,7 +5,7 @@ import { fetchUsersThunk } from '../actions/actionCreators'
 
 class AboutPage extends Component {
   componentDidMount() {
-    // this.props.fetchUsers()
+    this.props.fetchUsers()
   }
 
   render() {
