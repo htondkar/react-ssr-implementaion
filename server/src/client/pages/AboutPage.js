@@ -12,6 +12,7 @@ class AboutPage extends Component {
     return (
       <main>
         <h3>Our users</h3>
+
         <section>
           <ul>
             {this.props.users.map(user => (
@@ -19,7 +20,6 @@ class AboutPage extends Component {
             ))}
           </ul>
         </section>
-        <Link to="/">Home</Link>
       </main>
     )
   }

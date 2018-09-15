@@ -22,7 +22,10 @@ export default function renderer(req, store) {
 
   return `
     <html>
-      <head></head>
+      <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+      </head>
+
       <body>
         <div id="root">${content}</div>
 

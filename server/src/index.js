@@ -7,16 +7,16 @@ import proxy from 'express-http-proxy'
 const PORT = 3000
 const app = express()
 
-// send all api request to the real API
-const proxyOptions = {
-  proxyReqOptDecorator(options) {
-    console.log(options)
-    options.headers['x-forward-host'] = 'localhost:3000'
-    return options
-  },
-}
-
-app.use('/api', proxy('https://react-ssr-api.herokuapp.com', proxyOptions))
+// send all /api request to the real API
+app.use(
+  '/api',
+  proxy('https://react-ssr-api.herokuapp.com', {
+    proxyReqOptDecorator(options) {
+      options.headers['x-forward-host'] = 'localhost:3000'
+      return options
+    },
+  })
+)
 
 // serve the static files
 app.use(express.static('public'))

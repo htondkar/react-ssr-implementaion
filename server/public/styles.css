@@ -1,0 +1,21 @@
+.home {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+
+  justify-items: center;
+  align-items: center;
+}
+.main-header {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
+a {
+  padding: 5px 10px;
+}
+html {
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

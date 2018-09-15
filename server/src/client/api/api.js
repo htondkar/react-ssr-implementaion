@@ -5,11 +5,17 @@ export class Api {
     this.http = agent.create(options)
   }
 
+  intercept(fn) {
+    this.http.interceptors.request.use(fn)
+  }
+
+  fetchCurrentUser() {
+    return this.http.get('/current_user')
+  }
+
   fetchUsers() {
     return this.http.get('/users')
   }
 }
 
-const ApiInstance = new Api(axios, { baseURL: '/api' })
-
-export default ApiInstance
+export default new Api(axios, { baseURL: '/api' })

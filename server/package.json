@@ -23,6 +23,7 @@
     "babel-preset-stage-0": "6.24.1",
     "compression": "1.7.0",
     "concurrently": "3.5.0",
+    "dumper.js": "^1.1.1",
     "express": "4.15.4",
     "express-http-proxy": "1.0.6",
     "lodash": "4.17.4",
@@ -41,5 +42,10 @@
     "webpack-dev-server": "2.8.2",
     "webpack-merge": "4.1.0",
     "webpack-node-externals": "1.6.0"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "style-loader": "^0.23.0"
   }
 }
