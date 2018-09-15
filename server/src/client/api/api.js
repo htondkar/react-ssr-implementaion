@@ -1,10 +1,8 @@
 import axios from 'axios'
 
-class Api {
-  constructor(agent, { baseURL = '' }) {
-    this.http = agent.create({
-      baseURL,
-    })
+export class Api {
+  constructor(agent, options) {
+    this.http = agent.create(options)
   }
 
   fetchUsers() {
@@ -12,6 +10,6 @@ class Api {
   }
 }
 
-const ApiInstance = new Api(axios, { baseURL: 'https://react-ssr-api.herokuapp.com/' })
+const ApiInstance = new Api(axios, { baseURL: '/api' })
 
 export default ApiInstance

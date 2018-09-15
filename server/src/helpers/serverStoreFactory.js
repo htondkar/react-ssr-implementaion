@@ -5,5 +5,5 @@ import rootReducer from '../client/reducers/index'
 export const storeFactory = (
   reducers = rootReducer,
   initialState = {},
-  middlewares = [thunk]
+  middlewares = []
 ) => createStore(reducers, initialState, applyMiddleware(...middlewares))
